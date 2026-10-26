@@ -1,4 +1,4 @@
-import { MAX_BYTES, MAX_STAGES, MAX_DOSES, today, addDays, newStage, emptyCourse, exampleCourse, ranges, validateCourse, makeEnvelope, byteLength, encodePrefill, decodePrefill } from './course.js';
+import { MAX_BYTES, MAX_STAGES, MAX_DOSES, today, addDays, newStage, emptyCourse, exampleCourse, ranges, validateCourse, makeEnvelope, byteLength, encodePrefill, decodePrefill, normalizeTime } from './course.js';
 import { monthGrid, shiftMonth } from './calendar.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -131,7 +131,7 @@ function renderStages() {
       <div class="duration"><label>Длительность <input type="number" min="1" max="3650" step="1" value="${stage.days ?? ''}" data-field="days" aria-label="Длительность этапа ${i + 1}, дней" ${stage.days === null ? 'disabled' : 'required'}></label><span>дней</span>
       ${i === course.stages.length - 1 ? `<button type="button" class="toggle ${stage.days === null ? 'active' : ''}" data-action="continuous" aria-pressed="${stage.days === null}">Постоянно</button>` : ''}</div>
       <div class="dose-head" aria-hidden="true"><span>ВРЕМЯ</span><span>ДОЗА И КОММЕНТАРИЙ</span></div>
-      ${stage.doses.map((row, j) => `<div class="dose-row" data-row="${j}"><input type="time" value="${esc(row.time)}" data-field="time" aria-label="Этап ${i + 1}, приём ${j + 1}, время" required><input type="text" value="${esc(row.dose)}" data-field="dose" maxlength="160" placeholder="½ таблетки после еды" aria-label="Этап ${i + 1}, приём ${j + 1}, доза" required><button type="button" class="icon-button" data-action="remove-dose" aria-label="Удалить приём ${j + 1} этапа ${i + 1}" ${stage.doses.length === 1 ? 'disabled' : ''}>×</button></div>`).join('')}
+      ${stage.doses.map((row, j) => `<div class="dose-row" data-row="${j}"><input type="text" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="ЧЧ:ММ" value="${esc(row.time)}" data-field="time" aria-label="Этап ${i + 1}, приём ${j + 1}, время" required><input type="text" value="${esc(row.dose)}" data-field="dose" maxlength="160" placeholder="½ таблетки после еды" aria-label="Этап ${i + 1}, приём ${j + 1}, доза" required><button type="button" class="icon-button" data-action="remove-dose" aria-label="Удалить приём ${j + 1} этапа ${i + 1}" ${stage.doses.length === 1 ? 'disabled' : ''}>×</button></div>`).join('')}
       <div class="stage-bottom"><button type="button" class="add-dose" data-action="add-dose" ${stage.doses.length >= MAX_DOSES ? 'disabled' : ''}>＋ Добавить приём</button><button type="button" class="copy-stage" data-action="copy-stage" ${course.stages.length >= MAX_STAGES || course.stages.some((item) => item.days === null) ? 'disabled' : ''}>Скопировать этап ↗</button></div>
     </section>`).join('');
   updateSummary();
@@ -166,6 +166,16 @@ $('#stages').addEventListener('input', (event) => {
   changed();
 });
 
+$('#stages').addEventListener('focusout', (event) => {
+  const input = event.target;
+  if (input.dataset.field !== 'time') return;
+  const time = normalizeTime(input.value);
+  input.value = time;
+  const stage = course.stages[Number(input.closest('[data-stage]').dataset.stage)];
+  stage.doses[Number(input.closest('[data-row]').dataset.row)].time = time;
+  changed();
+});
+
 $('#stages').addEventListener('click', (event) => {
   const button = event.target.closest('[data-action]');
   if (!button || button.disabled) return;
@@ -197,6 +207,7 @@ $('#reset').addEventListener('click', () => {
 $('#course-form').addEventListener('submit', (event) => {
   event.preventDefault();
   if (invalidLink) return;
+  for (const stage of course.stages) for (const row of stage.doses) row.time = normalizeTime(row.time);
   const errors = validateCourse(course);
   if (errors.length) { message(errors.join('\n'), '#errors'); return; }
   lastPayload = makeEnvelope(course, edit);

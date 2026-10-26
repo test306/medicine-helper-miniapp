@@ -2,6 +2,19 @@ export const MAX_BYTES = 4096;
 export const MAX_STAGES = 10;
 export const MAX_DOSES = 12;
 
+export function normalizeTime(value) {
+  const text = value.trim();
+  let hours, minutes;
+  const colon = text.match(/^(\d{1,2}):(\d{2})$/);
+  if (colon) [, hours, minutes] = colon;
+  else if (/^\d{3,4}$/.test(text)) {
+    hours = text.slice(0, -2);
+    minutes = text.slice(-2);
+  } else return text;
+  if (Number(hours) > 23 || Number(minutes) > 59) return text;
+  return `${hours.padStart(2, '0')}:${minutes}`;
+}
+
 export function today() {
   const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Krasnoyarsk', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
   const get = (key) => parts.find((part) => part.type === key).value;
