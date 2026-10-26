@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="referrer" content="no-referrer">
+  <title>Курс — лекарства</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="brand" href="./" aria-label="На главную"><span class="brand-icon">✚</span> Курс</a>
+      <span class="badge">Прототип</span>
+    </header>
+    <div id="notice" role="status" hidden></div>
+    <section id="editor">
+      <div class="intro"><div class="eyebrow" id="mode-label">НОВОЕ ЛЕКАРСТВО</div>
+        <h1>Весь курс.<br>В одной форме.</h1>
+        <p>Задайте время и дозу для каждого приёма.<br>Если схема меняется — добавьте следующий этап.</p>
+      </div>
+      <form id="course-form">
+        <section class="panel basics">
+          <label>Название лекарства<input id="medicine" name="medicine" maxlength="128" placeholder="Как написано на упаковке" autocomplete="off" required></label>
+          <div class="date-field"><span id="start-label">Начало курса</span><button type="button" id="open-calendar" class="date-trigger" aria-haspopup="dialog" aria-labelledby="start-label start-display"><span id="start-display"></span><span aria-hidden="true">▦</span></button><input id="start" name="start" type="hidden"></div>
+          <div class="quick-dates"><button type="button" id="today" class="chip">Сегодня</button><button type="button" id="tomorrow" class="chip">Завтра</button></div>
+        </section>
+        <div class="section-label"><h2>Схема приёма</h2><span>По порядку, без ввода дат вручную</span></div>
+        <div id="stages"></div>
+        <button type="button" id="add-stage" class="add-stage">＋ Добавить следующий этап</button>
+        <div class="editor-footer"><button type="button" id="example" class="text-button">Попробовать пример: 2 дня + 3 дня</button><button type="button" id="reset" class="text-button muted">Очистить</button></div>
+        <div id="errors" role="alert" hidden></div>
+        <div class="action-bar"><div><strong id="summary">1 этап</strong><span>Дозы указываете вы</span></div><button type="submit" class="primary" id="review-button">Проверить курс <span>→</span></button></div>
+      </form>
+    </section>
+    <section id="review" hidden>
+      <div class="intro"><div class="eyebrow">ПЕРЕД СОХРАНЕНИЕМ</div><h1>Всё верно?</h1><p>Проверьте даты, время и дозы.<br>Каждая строка станет отдельным напоминанием.</p></div>
+      <div id="review-content"></div>
+      <p class="footnote">Только «Готово» в сообщении бота подтверждает приём. Через 24 часа неподтверждённый приём закрывается без отметки «принято».</p>
+      <div class="action-bar"><button type="button" id="back" class="secondary">← Исправить</button><button type="button" id="save" class="primary">Сохранить курс</button></div>
+      <div id="review-errors" role="alert" hidden></div>
+    </section>
+    <section id="result" hidden>
+      <div class="intro"><div class="eyebrow">ЛОКАЛЬНАЯ ПРОВЕРКА</div><h1>Форма готова<br>к передаче.</h1><p>Это демонстрация: бот и база данных не изменены.</p></div>
+      <div class="panel result-panel"><h2>Проверим редактирование?</h2><p>Откройте сохранённый курс в этой же форме. Его название, этапы, время и дозы будут предзаполнены.</p><button type="button" id="edit-demo" class="primary">Открыть для редактирования</button><button type="button" id="return-editor" class="text-button">Вернуться к форме</button></div>
+      <details><summary>Данные для бота <span id="byte-count"></span></summary><pre id="payload"></pre></details>
+    </section>
+    <dialog id="calendar" aria-labelledby="calendar-title">
+      <div class="calendar-heading"><div><div class="eyebrow">НАЧАЛО КУРСА</div><h2 id="calendar-title">Выберите дату</h2></div><button type="button" id="calendar-close" class="icon-button" aria-label="Закрыть календарь">×</button></div>
+      <div class="calendar-nav"><button type="button" id="calendar-prev" aria-label="Предыдущий месяц">‹</button><label><span class="sr-only">Месяц</span><select id="calendar-month"></select></label><label><span class="sr-only">Год</span><select id="calendar-year"></select></label><button type="button" id="calendar-next" aria-label="Следующий месяц">›</button></div>
+      <div class="calendar-weekdays" aria-hidden="true"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span></div>
+      <div id="calendar-days" class="calendar-days" role="group" aria-label="Дни месяца"></div>
+      <div class="calendar-shortcuts"><button type="button" id="calendar-today" class="secondary">Сегодня</button><button type="button" id="calendar-tomorrow" class="secondary">Завтра</button></div>
+      <p class="calendar-help">Нажмите на день, чтобы выбрать дату</p>
+    </dialog>
+    <footer class="page-footer">Лекарство → этапы → время и доза</footer>
+  </main>
+</body>
+</html>
