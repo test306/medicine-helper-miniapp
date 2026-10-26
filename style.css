@@ -24,3 +24,5 @@ body:has(#calendar[open]){overflow:hidden}
 .calendar-shortcuts{display:flex;gap:10px;border-top:1px solid var(--line);margin-top:18px;padding-top:18px}.calendar-shortcuts button{flex:1;min-height:46px;color:var(--accent);background:var(--soft);border:0;font-size:14px}
 .calendar-help{font-size:12px;text-align:center;margin:14px 0 0}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:540px){#calendar{padding:16px 12px;border-radius:20px}.calendar-heading{padding:0 5px}.calendar-day{min-height:49px}.calendar-nav select{font-size:15px}.calendar-nav{gap:4px}}
+
+#editor .intro{padding:22px 0 8px}#editor .intro .eyebrow{margin-bottom:10px}
