@@ -14,12 +14,11 @@
   <main>
     <header>
       <a class="brand" href="./" aria-label="На главную"><span class="brand-icon">✚</span> Курс</a>
-      <span class="badge">Прототип</span>
     </header>
     <div id="notice" role="status" hidden></div>
     <section id="editor">
       <div class="intro"><div class="eyebrow" id="mode-label">НОВОЕ ЛЕКАРСТВО</div>
-        
+
         <p>Задайте время и дозу для каждого приёма.<br>Если схема меняется — добавьте следующий этап.</p>
       </div>
       <form id="course-form">
@@ -44,8 +43,8 @@
       <div id="review-errors" role="alert" hidden></div>
     </section>
     <section id="result" hidden>
-      <div class="intro"><div class="eyebrow">ЛОКАЛЬНАЯ ПРОВЕРКА</div><h1>Форма готова<br>к передаче.</h1><p>Это демонстрация: бот и база данных не изменены.</p></div>
-      <div class="panel result-panel"><h2>Проверим редактирование?</h2><p>Откройте сохранённый курс в этой же форме. Его название, этапы, время и дозы будут предзаполнены.</p><button type="button" id="edit-demo" class="primary">Открыть для редактирования</button><button type="button" id="return-editor" class="text-button">Вернуться к форме</button></div>
+      <div class="intro"><div class="eyebrow">КУРС ПОДГОТОВЛЕН</div><h1>Форма готова<br>к передаче.</h1><p>Для сохранения курса откройте форму через бота в Telegram.</p></div>
+      <div class="panel result-panel"><h2>Проверим редактирование?</h2><p>Откройте подготовленный курс в этой же форме. Его название, этапы, время и дозы будут предзаполнены.</p><button type="button" id="edit-demo" class="primary">Открыть для редактирования</button><button type="button" id="return-editor" class="text-button">Вернуться к форме</button></div>
       <details><summary>Данные для бота <span id="byte-count"></span></summary><pre id="payload"></pre></details>
     </section>
     <dialog id="calendar" aria-labelledby="calendar-title">

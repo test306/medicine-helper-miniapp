@@ -235,7 +235,7 @@ $('#save').addEventListener('click', () => {
     } catch {
       submitted = false;
       $('#save').disabled = false;
-      message('Не удалось передать курс. Черновик сохранён. Откройте форму кнопкой клавиатуры тестового бота.', '#review-errors');
+      message('Не удалось передать курс. Черновик сохранён. Откройте форму кнопкой клавиатуры бота.', '#review-errors');
     }
     return;
   }
@@ -262,7 +262,7 @@ if (!invalidLink) {
     const draft = JSON.parse(localStorage.getItem(storageKey));
     if (draft && Date.now() - draft.savedAt < 7 * 24 * 60 * 60 * 1000 && draft.course && Array.isArray(draft.course.stages) && draft.course.stages.length >= 1 && draft.course.stages.length <= MAX_STAGES && draft.course.stages.every((stage) => stage && Array.isArray(stage.doses) && stage.doses.length >= 1 && stage.doses.length <= MAX_DOSES && stage.doses.every((dose) => dose && typeof dose.time === 'string' && typeof dose.dose === 'string'))) savedDraft = draft.course;
   } catch { clearDraft(); }
-  message(edit ? 'Курс предзаполнен. Изменения применятся только после сохранения и проверки ботом.' : telegramMode ? 'Тестовая форма: результат получит тестовый бот.' : 'Можно попробовать форму в браузере. Напоминания не создаются.');
+  message(edit ? 'Курс предзаполнен. Изменения применятся только после сохранения и проверки ботом.' : telegramMode ? 'Заполните курс и сохраните его. Подтверждение придёт сообщением от бота.' : 'Чтобы сохранить курс и получать напоминания, откройте форму через бота в Telegram.');
   if (savedDraft) {
     const button = document.createElement('button');
     button.type = 'button'; button.className = 'text-button'; button.textContent = 'Восстановить черновик';
